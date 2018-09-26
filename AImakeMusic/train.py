@@ -7,8 +7,8 @@
 import numpy as np
 import tensorflow as tf
 
-from musicAI import utils
-from musicAI import network
+from AImakeMusic import utils
+from AImakeMusic import network
 
 """
 ==== 一些术语的概念 ====
