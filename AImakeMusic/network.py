@@ -9,7 +9,6 @@ import tensorflow as tf
 
 # 神经网络的模型
 def network_model(inputs, num_pitch, weights_file=None):
-    tf.device('/gpu:0')
     model = tf.keras.models.Sequential()  # Sequential 按次序的
     model.add(tf.keras.layers.LSTM(
         512,  # LSTM 层神经元的数目是 512，也是 LSTM 层输出的维度

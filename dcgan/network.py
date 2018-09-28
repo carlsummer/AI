@@ -5,6 +5,12 @@ DCGAN 深层卷积的生成对抗网络
 """
 import tensorflow as tf
 
+# Hyper parameter（超参数）
+EPOCHS = 100
+BATCH_SIZE = 128
+LEARNING_RATE = 0.0002
+BETA_1 = 0.5
+
 
 # 定义判别器模型
 def discriminator_model():
@@ -55,6 +61,7 @@ def generator_model():
     model.add(tf.keras.layers.Activation("tanh"))
 
     return model
+
 
 # if __name__ == "__main__":
 #     generator = generator_model()

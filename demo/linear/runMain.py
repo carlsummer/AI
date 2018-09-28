@@ -1,7 +1,7 @@
-from linear import AdalineGD as ag
-from common import plotDec
+import demo.linear.AdalineGD as  ag
+import demo.common.plotDec as plotDec
 import matplotlib.pyplot as plt
-from common import dataReady
+import demo.common.dataReady as dataReady
 
 ada = ag.AdalineGD(eta=0.0001,n_iter=50)
 ada.fit(dataReady.X,dataReady.y)

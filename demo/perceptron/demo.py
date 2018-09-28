@@ -1,6 +1,6 @@
 import matplotlib.pyplot as  plt
-from perceptron import main2 as mm
-from common import dataReady
+import main2 as mm
+import demo.common.dataReady as  dataReady
 from common import plotDec
 
 ppn = mm.Perceptron(eta = 0.1,n_iter=50)

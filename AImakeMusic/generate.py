@@ -7,8 +7,8 @@ import pickle
 import numpy as np
 import tensorflow as tf
 
-from musicAI import utils
-from musicAI import network
+from AImakeMusic import utils
+from AImakeMusic import network
 
 
 # 以之前训练所得的最佳参数来生成音乐
@@ -27,7 +27,7 @@ def generate():
 
     # 载入之前训练时最好的参数文件（最好用 loss 最小 的那一个参数文件，
     # 记得要把它的名字改成 best-weights.hdf5 ），来生成神经网络模型
-    model = network.network_model(normalized_input, num_pitch, "weights-04-4.1930.hdf5")
+    model = network.network_model(normalized_input, num_pitch, "best-weights.hdf5")
 
     # 用神经网络来生成音乐数据
     prediction = generate_notes(model, network_input, pitch_names, num_pitch)
