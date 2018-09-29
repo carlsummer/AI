@@ -17,6 +17,7 @@ class Perceptron(object):
     """
     对神经分叉所得出的权重进行点积
     """
+
     def net_input(self, X):
         """
         z = W0*1 + W1*X1 + ..... Wn*Xn
@@ -27,11 +28,13 @@ class Perceptron(object):
     """
     神经末梢进行判断
     """
+
     def predict(self, X):
         return np.where(self.net_input(X) >= 0.0, 1, -1);
         pass
 
     """对输入的样本进行神经元的培训fit"""
+
     def fit(self, X, y):
         """
         输入训练数据，培训神经元，x输入样本向量，y对应样本分类
@@ -61,7 +64,7 @@ class Perceptron(object):
             """
             for xi, target in zip(X, y):
                 """
-                update = n + （y - y'）
+                update = n * （y - y'）
                 """
                 update = self.eta * (target - self.predict(xi))
                 """
@@ -78,6 +81,5 @@ class Perceptron(object):
                 pass
 
             pass
-
 
         pass

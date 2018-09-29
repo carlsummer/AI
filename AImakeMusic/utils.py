@@ -4,7 +4,7 @@ import os
 import subprocess  # 子过程
 import pickle
 import glob
-from music21 import converter, instrument, note, chord,stream
+from music21 import converter, instrument, note, chord, stream
 
 """
 MIDI相关函数
@@ -104,23 +104,24 @@ def get_notes():
 
     return notes
 
+
 def create_music(prediction):
     """
     prediction 预测
     用神经网络'预测'的音乐数据来生成 MIDI 文件，再转成 MP3 文件
     """
-    offset = 0 # 偏移
+    offset = 0  # 偏移
     output_notes = []
 
     # 生成 Note（音符）或 Chord（和弦）对象
     for data in prediction:
         # 是 Chord。格式例如： 4.15.7
-        if("." in data) or data.isdigit():  #digit 数字 chord 和弦
+        if ("." in data) or data.isdigit():  # digit 数字 chord 和弦
             notes_in_chord = data.split(".")
             notes = []
             for current_note in notes_in_chord:
                 new_note = note.Note(int(current_note))
-                new_note.storedInstrument = instrument.Piano() # 乐器用钢琴 (piano) stored 存储的
+                new_note.storedInstrument = instrument.Piano()  # 乐器用钢琴 (piano) stored 存储的
                 notes.append(new_note)
             new_chord = chord.Chord(notes)
             new_chord.offset = offset
@@ -139,8 +140,7 @@ def create_music(prediction):
     midi_stream = stream.Stream(output_notes)
 
     # 写入 MIDI 文件
-    midi_stream.write('midi',fp="output.mid") #格式是midi格式
+    midi_stream.write('midi', fp="output.mid")  # 格式是midi格式
 
     # 将生成的 MIDI 文件转换成 MP3
     convert_midi_to_mp3()
-

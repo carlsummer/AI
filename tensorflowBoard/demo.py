@@ -25,5 +25,5 @@ with tf.Session() as sess:
     result = sess.run(y, feed_dict={x: 3.0})
     print("y = %s" % result)  # 打印y = wx+b的值
 
-#查看log文件
-#I:\人工智能\workspace\mooc\tensorflowBoard>tensorboard --logdir=log
+# 查看log文件
+# I:\人工智能\workspace\mooc\tensorflowBoard>tensorboard --logdir=log
