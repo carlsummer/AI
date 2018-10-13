@@ -1,0 +1,57 @@
+sudo gedit /etc/apt/sources.list 
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+
+sudo apt-get update
+sudo apt-get remove libappstream3
+sudo apt-get update
+sudo apt-get install golang python3-dev python-dev libcupti-dev libjpeg-turbo8-dev make tmux htop chromium-browser git cmake zlib1g-dev libjpeg-dev xvfb libav-tools xorg-dev python-opengl libboost-all-dev libsdl2-dev swig
+
+anaconda
+wget https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh
+bash Anaconda3-4.2.0-Linux-x86_64.sh
+export PATH="/home/$USER/anaconda3/bin:$PATH"
+source ~/.bashrc
+conda create --name universe python=3.5 anaconda
+source activate universe
+conda install pip six libgcc swig
+conda install opencv
+cd ~
+git clone https://github.com/openai/gym.git
+cd ~/gym
+pip install -e .
+pip uninstall gym
+sudo pip install gym==0.9.5
+sudo pip install gym[atari]
+
+sudo vi  .bashrc
+添加
+alias sudo='sudo env PATH=$PATH'
+之后
+source ~/.bashrc
+
+cd ~
+git clone https://github.com/openai/universe.git
+cd universe
+pip install -e .
+
+docker
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+sudo apt-get update
+sudo apt-get install -y docker-ce
+sudo service docker start
+
+
+
+
