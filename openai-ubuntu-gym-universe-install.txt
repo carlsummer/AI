@@ -53,5 +53,70 @@ sudo apt-get install -y docker-ce
 sudo service docker start
 
 
+error:
+[2018-10-13 16:59:49,386] VNC server localhost:5900 did not come up yet (error: [Errno 111] Connection refused). Sleeping for 1s.
+Traceback (most recent call last):
+  File "test-universe.py", line 5, in <module>
+    env.configure(remotes=1)  # automatically creates a local docker container
+  File "/home/zengxiaohui/universe/universe/wrappers/timer.py", line 14, in configure
+    self.env.configure(**kwargs)
+  File "/home/zengxiaohui/universe/universe/wrappers/render.py", line 21, in configure
+    self.env.configure(**kwargs)
+  File "/home/zengxiaohui/universe/universe/wrappers/throttle.py", line 32, in configure
+    self.env.configure(**kwargs)
+  File "/home/zengxiaohui/universe/universe/envs/vnc_env.py", line 199, in configure
+    use_recorder_ports=record,
+  File "/home/zengxiaohui/universe/universe/remotes/build.py", line 19, in build
+    n=n,
+  File "/home/zengxiaohui/universe/universe/remotes/docker_remote.py", line 55, in __init__
+    self._start()
+  File "/home/zengxiaohui/universe/universe/remotes/docker_remote.py", line 85, in _start
+    self.healthcheck(self.instances)
+  File "/home/zengxiaohui/universe/universe/remotes/docker_remote.py", line 110, in healthcheck
+    start_timeout=30,
+  File "/home/zengxiaohui/universe/universe/remotes/healthcheck.py", line 14, in run
+    healthcheck.run()
+  File "/home/zengxiaohui/universe/universe/remotes/healthcheck.py", line 131, in run
+    self._register_vnc(address)
+  File "/home/zengxiaohui/universe/universe/remotes/healthcheck.py", line 63, in _register_vnc
+    raise error.Error('VNC server {} did not come up within {}s'.format(address, self.start_timeout))
+universe.error.Error: VNC server localhost:5900 did not come up within 30s
+[2018-10-13 16:59:50,780] Killing and removing container: id=e87558cb7c9565de75c6189a0f313fdb47a92d0c8324e3905599a633f514a8d0
+解决：
+cd openai-flashgames-patch
+sudo bash build.sh
 
-
+error:
+universe-twEjpw-0 | [tigervnc]  VNCSConnST:  Server default pixel format depth 24 (32bpp) little-endian rgb888
+2018/10/20 16:10:02 I1020 16:10:02.200642 3772 gymvnc.go:550] [0:localhost:5900] connection established
+libGL error: unable to load driver: vmwgfx_dri.so
+libGL error: driver pointer missing
+libGL error: failed to load driver: vmwgfx
+libGL error: unable to load driver: swrast_dri.so
+libGL error: failed to load driver: swrast
+Traceback (most recent call last):
+universe-twEjpw-0 | [tigervnc]  VNCSConnST:  Client pixel format depth 24 (32bpp) little-endian bgr888
+  File "test-universe.py", line 11, in <module>
+    env.render()
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 150, in render
+    return self._render(mode=mode, close=close)
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 286, in _render
+    return self.env.render(mode, close)
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 150, in render
+    return self._render(mode=mode, close=close)
+  File "/home/zengxiaohui/universe/universe/wrappers/render.py", line 52, in _render
+    return self.env.render(mode=mode, *args, **kwargs)
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 150, in render
+    return self._render(mode=mode, close=close)
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 286, in _render
+    return self.env.render(mode, close)
+  File "/home/zengxiaohui/anaconda3/envs/universe/lib/python3.5/site-packages/gym/core.py", line 150, in render
+    return self._render(mode=mode, close=close)
+  File "/home/zengxiaohui/universe/universe/envs/vnc_env.py", line 552, in _render
+    self.vnc_session.render(self.connection_names[0])
+go_vncdriver.Error: VersionUnavailable: GLX: Failed to create context: GLXBadFBConfig
+/home/zengxiaohui/software/go-vncdriver/.build/src/github.com/openai/go-vncdriver/vncgl/vncgl.go:60: couldn't create window
+/home/zengxiaohui/software/go-vncdriver/.build/src/github.com/openai/go-vncdriver/gymvnc/gymvnc.go:245: could not render
+[2018-10-20 16:10:02,322] Killing and removing container: id=9edbc88c7bd4127bc832abb26afb646a3dc91e828c30eca7618ea34a76c0add4
+解决：
+sudo apt-get install libgl1-mesa-dri libgl1-mesa-dri:i386
