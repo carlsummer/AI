@@ -10,6 +10,10 @@ import tensorflow as tf
 np.random.seed(1)
 tf.set_random_seed(1)
 
+# 伪随机数。为了复现结果
+np.random.seed(1)
+tf.set_random_seed(1)
+
 
 class DeepQLearning:
     def __init__(
@@ -53,8 +57,8 @@ class DeepQLearning:
         self.sess = tf.Session()
 
         if output_graph:
-            # 输出 TensorBoard日志文件
-            tf.summary.FileWriter('logs', self.sess.graph)
+            # 输出 TensorBoard 日志文件
+            tf.summary.FileWriter("logs", self.sess.graph)
 
         # 初始化全局变量
         self.sess.run(tf.global_variables_initializer())
@@ -73,7 +77,7 @@ class DeepQLearning:
             self.s = tf.placeholder(tf.float32, [None, self.n_features], name='s')  # State
             self.a = tf.placeholder(tf.int32, [None, ], name='a')  # Action
             self.r = tf.placeholder(tf.float32, [None, ], name='r')  # Reward
-            self.s_ = tf.placeholder(tf.float32, [None, self.n_features], name='s_')  # 下一个State
+            self.s_ = tf.placeholder(tf.float32, [None, self.n_features], name='s_')  # 下一个 State
 
         # 权重和偏差
         w_initializer, b_initializer = tf.random_normal_initializer(0., 0.3), tf.constant_initializer(0.1)
@@ -88,18 +92,18 @@ class DeepQLearning:
         # 创建 Q_target 神经网络, 提供 target Q
         with tf.variable_scope('Q_target_net'):
             t1 = tf.layers.dense(self.s_, 20, tf.nn.relu, kernel_initializer=w_initializer,
-                                 bias_initializer=b_initializer, name="t1")
+                                 bias_initializer=b_initializer, name='t1')
             self.q_next = tf.layers.dense(t1, self.n_actions, kernel_initializer=w_initializer,
-                                          bias_initializer=b_initializer, name="t2")
+                                          bias_initializer=b_initializer, name='t2')
 
         # 在 Q_target_net 中，计算下一个状态 s_j_next 的真实 Q 值
-        with tf.variable_scope("Q_target"):
+        with tf.variable_scope('Q_target'):
             q_target = self.r + self.gamma * tf.reduce_max(self.q_next, axis=1)
             # tf.stop_gradient 使 q_target 不参与梯度计算的操作
             self.q_target = tf.stop_gradient(q_target)
 
         # 在 Q_eval_net 中，计算状态 s_j 的估计 Q 值
-        with tf.variable_scope("Q_eval"):
+        with tf.variable_scope('Q_eval'):
             a_indices = tf.stack([tf.range(tf.shape(self.a)[0], dtype=tf.int32), self.a], axis=1)
             # tf.gather_nd 用 indices 定义的形状来对 params 进行切片
             self.q_eval_by_a = tf.gather_nd(params=self.q_eval, indices=a_indices)
@@ -141,7 +145,7 @@ class DeepQLearning:
     def learn(self):
         # 是否替换 Q_target_net 参数
         if self.learning_steps % self.replace_target_iter == 0:
-            self.sess_run(self.target_replace_op)
+            self.sess.run(self.target_replace_op)
             print('\n替换现实网络的参数...\n')
 
         # 从记忆中随机抽取 batch_size 长度的记忆片段
