@@ -38,9 +38,15 @@ conv1_2 = tf.layers.conv2d(conv1_1,
                            padding='same',
                            activation=tf.nn.relu,
                            name='conv1_2')
+conv1_3 = tf.layers.conv2d(conv1_2,
+                           32,  # output channel number
+                           (3, 3),  # kernel size
+                           padding='same',
+                           activation=tf.nn.relu,
+                           name='conv1_3')
 
 # 16 * 16
-pooling1 = tf.layers.max_pooling2d(conv1_2,
+pooling1 = tf.layers.max_pooling2d(conv1_3,
                                    (2, 2),  # kernel size
                                    (2, 2),  # stride
                                    name='pool1')
@@ -57,8 +63,14 @@ conv2_2 = tf.layers.conv2d(conv2_1,
                            padding='same',
                            activation=tf.nn.relu,
                            name='conv2_2')
+conv2_3 = tf.layers.conv2d(conv2_2,
+                           32,  # output channel number
+                           (3, 3),  # kernel size
+                           padding='same',
+                           activation=tf.nn.relu,
+                           name='conv2_3')
 # 8 * 8
-pooling2 = tf.layers.max_pooling2d(conv2_2,
+pooling2 = tf.layers.max_pooling2d(conv2_3,
                                    (2, 2),  # kernel size
                                    (2, 2),  # stride
                                    name='pool2')
@@ -75,8 +87,14 @@ conv3_2 = tf.layers.conv2d(conv3_1,
                            padding='same',
                            activation=tf.nn.relu,
                            name='conv3_2')
+conv3_3 = tf.layers.conv2d(conv3_2,
+                           32,  # output channel number
+                           (3, 3),  # kernel size
+                           padding='same',
+                           activation=tf.nn.relu,
+                           name='conv3_3')
 # 4 * 4 * 32
-pooling3 = tf.layers.max_pooling2d(conv3_2,
+pooling3 = tf.layers.max_pooling2d(conv3_3,
                                    (2, 2),  # kernel size
                                    (2, 2),  # stride
                                    name='pool3')
