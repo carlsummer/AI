@@ -55,6 +55,7 @@ def writexml(filename, saveimg, bboxes, xmlpath):
         objects = doc.createElement('object')
         annotation.appendChild(objects)
         object_name = doc.createElement('name')
+        object_name.appendChild(doc.createTextNode('face'))
         objects.appendChild(object_name)
         pose = doc.createElement('pose')
         pose.appendChild(doc.createTextNode('Unspecified'))
@@ -82,3 +83,14 @@ def writexml(filename, saveimg, bboxes, xmlpath):
     f = open(xmlpath, 'w')
     f.write(doc.toprettyxml(indent=''))
     f.close()
+
+
+rootdir = "G:\\idea-workspace\\github-project\\wider_face"
+
+def convertimgset(img_set):
+    imgdir = rootdir + "\\WIDER_" + img_set + "\\images"
+    gtfilepath = rootdir + "\\wider_face_split\\wider_face_" + img_set + "_bbx_gt.txt"
+    index = 0
+    with open(gtfilepath,'r') as gtfiles:
+        while(index < 1000):  #True
+            filename = gtfiles.readable()[:-1]
