@@ -90,7 +90,43 @@ rootdir = "G:\\idea-workspace\\github-project\\wider_face"
 def convertimgset(img_set):
     imgdir = rootdir + "\\WIDER_" + img_set + "\\images"
     gtfilepath = rootdir + "\\wider_face_split\\wider_face_" + img_set + "_bbx_gt.txt"
+
+    fwrite = open(rootdir + "/ImageSets/Main/" + img_set + ".txt","w")
+
     index = 0
     with open(gtfilepath,'r') as gtfiles:
         while(index < 1000):  #True
             filename = gtfiles.readable()[:-1]
+            if(filename == ""):
+                continue
+            imgpath = imgdir + filename
+
+            img = cv2.imread(imgpath)
+            if not img.data:
+                break
+            numbbox = int(gtfiles.readline())
+
+            bboxes = []
+
+            for i in range(numbbox):
+                line = gtfiles.readline()
+                lines = line.split()
+                lines = lines[0:3]
+
+                bbox = (int(lines[0]),int(lines[1]),int(lines[2]),int(lines(3)))
+
+                bboxes.append(bbox)
+
+            filename = filename.replace("/","_")
+
+            if len(bboxes) == 0:
+                print("no face")
+
+            cv2.imwrite('{}/JPEGImages/{}'.format(rootdir,filename),img)
+
+            fwrite.write(filename.split["."][0] + "\n")
+
+            xmlpath = "{}/Annotations/{}.xml".format(rootdir,filename.split(".")[0])
+
+
+
