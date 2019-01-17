@@ -37,7 +37,7 @@ def conv_wrapper(inputs, name, is_training,output_channel=32, kernel_size=(3, 3)
                                   kernel_size,
                                   padding=padding,
                                   activation=None,
-                                  name="conv1")
+                                  name= name + "conv1")
         bn = tf.layers.batch_normalization(conv2d,training=is_training)
 
         return activation(bn)
