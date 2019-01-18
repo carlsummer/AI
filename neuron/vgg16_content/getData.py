@@ -1,6 +1,6 @@
 import numpy as np
 
-vgg16_data = np.load('vgg16.npy')
+vgg16_data = np.load('vgg16.npy',encoding="latin1")
 print(type(vgg16_data))
 print(vgg16_data)
 
