@@ -126,8 +126,8 @@ content = tf.placeholder(tf.float32,shape=[1,224,224,3])
 vgg16_for_result.build(content)
 """
 
-content_img_path = "gugong.png"
-style_img_path = "xingkong.png"
+content_img_path = "gugong.jpg"
+style_img_path = "xingkong.jpeg"
 
 num_steps = 100
 learning_rate = 10
@@ -147,7 +147,7 @@ def initial_result(shape, mean, stddev):
 
 
 def read_img(img_name):
-    img = Image.open(img_name)
+    img = Image.open(img_name).convert("RGB")
     np_img = np.array(img)  # (224,224,3)
     np_img = np.asarray([np_img], dtype=np.int32)  # (1,224,224,3)
     return np_img
@@ -167,9 +167,7 @@ def gram_matrix(x):
 
 result = initial_result((1, 224, 224, 3), 127.5, 20)
 content_val = read_img(content_img_path)
-print(content_val.shape)
 style_val = read_img(style_img_path)
-print(style_val.shape)
 
 content = tf.placeholder(tf.float32, shape=[1, 224, 224, 3])
 style = tf.placeholder(tf.float32, shape=[1, 224, 224, 3])
@@ -185,12 +183,12 @@ vgg_for_result.build(result)
 
 content_features = [
     vgg_for_content.conv1_2,
-    vgg_for_content.conv2_2,
+    # vgg_for_content.conv2_2,
 ]
 
 result_content_features = [
     vgg_for_result.conv1_2,
-    vgg_for_result.conv2_2,
+    # vgg_for_result.conv2_2,
 ]
 
 # feature_size, [1,width,height,channel]
@@ -221,12 +219,12 @@ init_op = tf.global_variables_initializer()
 with tf.Session() as sess:
     sess.run(init_op)
     for step in range(num_steps):
-        loss_value, content_loss_value, style_loss_value = \
-            sess.run([loss, content_loss, style_loss, train_op],
-                     feed_dict={
-                         content: content_val,
-                         style: style_val
-                     })
+        loss_value, content_loss_value, style_loss_value, _ \
+            = sess.run([loss, content_loss, style_loss, train_op],
+                       feed_dict={
+                           content: content_val,
+                           style: style_val
+                       })
         print("step: %d,loss_value: %8.4f,"
               "content_loss: %8.4f, style_loss: %8.4f" \
               % (step + 1, loss_value[0], content_loss_value[0], style_loss_value[0]))
@@ -236,3 +234,4 @@ with tf.Session() as sess:
         img_arr = np.asarray(result_val, np.uint8)
         img = Image.fromarray(img_arr)
         img.save(result_img_path)
+
