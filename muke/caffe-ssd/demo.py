@@ -1,12 +1,17 @@
 import os, cv2, sys, shutil
+
 from xml.dom.minidom import Document
 
 
 def writexml(filename, saveimg, bboxes, xmlpath):
     doc = Document()
+
     annotation = doc.createElement('annotation')
+
     doc.appendChild(annotation)
+
     folder = doc.createElement('folder')
+
     folder_name = doc.createTextNode('widerface')
     folder.appendChild(folder_name)
     annotation.appendChild(folder)
@@ -20,7 +25,7 @@ def writexml(filename, saveimg, bboxes, xmlpath):
     database.appendChild(doc.createTextNode('wider face Database'))
     source.appendChild(database)
     annotation_s = doc.createElement('annotation')
-    annotation_s.appendChild(doc.createElement('PASCAL VOC2007'))
+    annotation_s.appendChild(doc.createTextNode('PASCAL VOC2007'))
     source.appendChild(annotation_s)
     image = doc.createElement('image')
     image.appendChild(doc.createTextNode('flickr'))
@@ -36,15 +41,19 @@ def writexml(filename, saveimg, bboxes, xmlpath):
     name_o = doc.createElement('name')
     name_o.appendChild(doc.createTextNode('yanyu'))
     owner.appendChild(name_o)
-    size = doc.createElement("size")
+
+    size = doc.createElement('size')
     annotation.appendChild(size)
+
     width = doc.createElement('width')
     width.appendChild(doc.createTextNode(str(saveimg.shape[1])))
     height = doc.createElement('height')
     height.appendChild(doc.createTextNode(str(saveimg.shape[0])))
-    depth = doc.createElement("depth")
+    depth = doc.createElement('depth')
     depth.appendChild(doc.createTextNode(str(saveimg.shape[2])))
+
     size.appendChild(width)
+
     size.appendChild(height)
     size.appendChild(depth)
     segmented = doc.createElement('segmented')
@@ -80,27 +89,27 @@ def writexml(filename, saveimg, bboxes, xmlpath):
         ymax = doc.createElement('ymax')
         ymax.appendChild(doc.createTextNode(str(bbox[1] + bbox[3])))
         bndbox.appendChild(ymax)
-    f = open(xmlpath, 'w')
+    f = open(xmlpath, "w")
     f.write(doc.toprettyxml(indent=''))
     f.close()
 
 
-rootdir = "G:\\idea-workspace\\github-project\\wider_face"
+rootdir = "/media/zengxiaohui/Seagate Backup Plus Drive/ArtificialIntelligence/docs/wider_face"
 
 
 def convertimgset(img_set):
-    imgdir = rootdir + "\\WIDER_" + img_set + "\\images"
-    gtfilepath = rootdir + "\\wider_face_split\\wider_face_" + img_set + "_bbx_gt.txt"
+    imgdir = rootdir + "/WIDER_" + img_set + "/images"
+    gtfilepath = rootdir + "/wider_face_split/wider_face_" + img_set + "_bbx_gt.txt"
 
     fwrite = open(rootdir + "/ImageSets/Main/" + img_set + ".txt", "w")
 
     index = 0
     with open(gtfilepath, 'r') as gtfiles:
         while (index < 1000):  # True
-            filename = gtfiles.readable()[:-1]
+            filename = gtfiles.readline()[:-1]
             if (filename == ""):
                 continue
-            imgpath = imgdir + filename
+            imgpath = imgdir + "/" + filename
 
             img = cv2.imread(imgpath)
             if not img.data:
@@ -111,20 +120,37 @@ def convertimgset(img_set):
 
             for i in range(numbbox):
                 line = gtfiles.readline()
-                lines = line.split()
-                lines = lines[0:3]
+                lines = line.split(" ")
+                lines = lines[0:4]  # 这里表示取0,1,2,3
 
-                bbox = (int(lines[0]), int(lines[1]), int(lines[2]), int(lines(3)))
+                bbox = (int(lines[0]), int(lines[1]), int(lines[2]), int(lines[3]))
 
                 bboxes.append(bbox)
 
             filename = filename.replace("/", "_")
 
+            # 抛弃图片中没有人脸的图片
             if len(bboxes) == 0:
                 print("no face")
+                continue
 
             cv2.imwrite('{}/JPEGImages/{}'.format(rootdir, filename), img)
 
-            fwrite.write(filename.split["."][0] + "\n")
+            fwrite.write(filename.split(".")[0] + "\n")
 
             xmlpath = "{}/Annotations/{}.xml".format(rootdir, filename.split(".")[0])
+
+            writexml(filename, img, bboxes, xmlpath)
+
+            print("success number is ", index)
+            index += 1
+    fwrite.close()
+
+
+if __name__ == "__main__":
+    img_sets = ["train", "val"]
+    for img_set in img_sets:
+        convertimgset(img_set)
+
+    shutil.move(rootdir + "/ImageSets/Main/" + "train.txt", rootdir + "/ImageSets/Main/" + "trainval.txt")
+    shutil.move(rootdir + "/ImageSets/Main/" + "val.txt", rootdir + "/ImageSets/Main/" + "test.txt")
